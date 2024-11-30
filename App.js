@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
-  Clipboard,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Clipboard, } from 'react-native';
 
 export default function App() {
   const [inputText, setInputText] = useState('');
@@ -52,13 +43,9 @@ export default function App() {
     setTranslatedText(temp);
   };
 
-  const handleKeyPress = (key) => {
-    setInputText((prevText) => prevText + key);
-  };
-
   const copyToClipboard = () => {
     Clipboard.setString(translatedText);
-    Alert.alert('Скопировано', 'Текст перевода скопирован в буфер обмена.');
+    Alert.alert('Скопировано.');
   };
 
   useEffect(() => {
@@ -73,19 +60,11 @@ export default function App() {
     return () => clearTimeout(timeoutId);
   }, [inputText, isRussianToMansi]);
 
-  const mansiKeys = [
-    'а', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о',
-    'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э',
-    'ю', 'я', 'ӈ', 'ӑ', 'ӗ', 'ӱ', 'ҥ', 'ӟ',
-  ];
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Переводчик</Text>
 
-      {/* Блок перевода */}
       <View style={styles.translationBox}>
-        {/* Верхняя часть: Поле ввода и язык */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             {isRussianToMansi ? 'Русский' : 'Мансийский'}
@@ -104,45 +83,24 @@ export default function App() {
           />
         </View>
 
-        {/* Средняя часть: Кнопка смены языка */}
         <TouchableOpacity style={styles.switchButton} onPress={toggleDirection}>
           <Text style={styles.switchText}>⇅</Text>
         </TouchableOpacity>
 
-        {/* Нижняя часть: Результат перевода */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             {isRussianToMansi ? 'Мансийский' : 'Русский'}
           </Text>
-          <View style={styles.outputContainer}>
-            {/* Кнопка копирования текста */}
-            <TouchableOpacity style={styles.copyButton} onPress={copyToClipboard}>
-              <Text style={styles.copyText}>📋</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.outputContainer}
+            onPress={copyToClipboard}
+          >
             <Text style={styles.output}>
               {translatedText || 'Здесь будет перевод...'}
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
-
-      {/* Мансийская клавиатура */}
-      {!isRussianToMansi && (
-        <ScrollView
-          style={styles.keyboard}
-          contentContainerStyle={styles.keyboardContainer}
-        >
-          {mansiKeys.map((key) => (
-            <TouchableOpacity
-              key={key}
-              style={styles.key}
-              onPress={() => handleKeyPress(key)}
-            >
-              <Text style={styles.keyText}>{key}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )}
     </View>
   );
 }
@@ -161,15 +119,11 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   translationBox: {
-    width: '90%',
+    width: 350,
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
     elevation: 5,
     padding: 15,
     boxShadow: 'rgba(0, 0, 0, 0.1) 0px 20px 100px',
@@ -214,52 +168,9 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f9f9f9',
     height: 100,
-    position: 'relative',
-  },
-  copyButton: {
-    position: 'absolute',
-    top: 5,
-    right: 5,
-    padding: 5,
-    backgroundColor: '#ddd',
-    borderRadius: 5,
-  },
-  copyText: {
-    fontSize: 14,
-    color: '#333',
   },
   output: {
     fontSize: 16,
     color: '#555',
-  },
-  keyboard: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    backgroundColor: '#eee',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  keyboardContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  key: {
-    width: '10%',
-    padding: 10,
-    margin: 5,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  keyText: {
-    fontSize: 18,
-    color: '#333',
   },
 });
